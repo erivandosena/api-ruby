@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  api-crud:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        - "1.0.0"
+        - 2428676974207265762d7061727365202d2d73686f7274204845414429
+    image: erivando/api-ruby:latest
+    container_name: api-crud
+    restart: always
+    volumes:
+      - ./log:/home/app/api-crud/log
+      - db_data:/home/app/api-crud/db
+    secrets:
+      - source: master_key
+        target: /home/app/api-crud/config/master.key
+    ports:
+      - "8002:80"
+
+secrets:
+  master_key:
+    file: ./config/master.key
+
+volumes:
+  db_data:
+    driver: local
+
+networks:
+  development:
+    driver: bridge

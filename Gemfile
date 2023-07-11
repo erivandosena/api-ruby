@@ -47,9 +47,12 @@ group :development do
   # gem "spring"
 end
 
-gem 'devise'
-gem 'doorkeeper'
+group :production, :test do
+  gem "rspec-rails"
+end
 
-gem "rails-api"
 gem "grape"
 gem "grape-swagger"
+
+gem 'devise'
+gem 'doorkeeper'
