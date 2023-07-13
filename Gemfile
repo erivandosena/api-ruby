@@ -51,8 +51,14 @@ group :production, :test do
   gem "rspec-rails"
 end
 
+gem 'optimist'
+
 gem "grape"
+
 gem "grape-swagger"
 
 gem 'devise'
+
 gem 'doorkeeper'
+
+gem 'rails-i18n'

@@ -14,15 +14,8 @@ services:
     volumes:
       - ./log:/home/app/api-crud/log
       - db_data:/home/app/api-crud/db
-    secrets:
-      - source: master_key
-        target: /home/app/api-crud/config/master.key
     ports:
       - "8002:80"
-
-secrets:
-  master_key:
-    file: ./config/master.key
 
 volumes:
   db_data:
