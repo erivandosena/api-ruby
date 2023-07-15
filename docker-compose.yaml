@@ -1,7 +1,9 @@
 version: "3.9"
 
 services:
-  api-crud:
+
+  # app
+  api-ruby:
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -9,17 +11,58 @@ services:
         - "1.0.0"
         - 2428676974207265762d7061727365202d2d73686f7274204845414429
     image: erivando/api-ruby:latest
-    container_name: api-crud
+    container_name: api-ruby
+    command: >
+      bash -c "sleep 15
+      && bundle exec rake db:exists && bundle exec rake db:migrate || (bundle exec rake db:create && bundle exec rake db:migrate) || bundle exec rake db:setup
+      && /sbin/my_init"
     restart: always
     volumes:
       - ./log:/home/app/api-crud/log
-      - db_data:/home/app/api-crud/db
+      - storage:/home/app/api-crud/storage
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgresql:5432/api_ruby_production
+      REDIS_URL: redis://redis:6379/0
     ports:
       - "8002:80"
+    networks:
+      - development
+    depends_on:
+      - postgresql
+      - redis
+
+  # db
+  postgresql:
+    image: postgres:latest
+    container_name: postgresql
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./pg_logs:/var/log/postgresql:rw
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: api_ruby_development
+    networks:
+      - development
+
+  # cache
+  redis:
+    image: redis:bookworm
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis_logs:/var/log/redis:rw
+      - redis_data:/data
+    networks:
+      - development
 
 volumes:
-  db_data:
-    driver: local
+  storage:
+  redis_data:
+  postgres_data:
 
 networks:
   development:

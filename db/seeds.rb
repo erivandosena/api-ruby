@@ -5,3 +5,7 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
+
+pages = Page.create([
+  {title: "Artigo Teste", description: "Teste para o texto do novo artigo.", active: true}
+])
