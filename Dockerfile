@@ -1,7 +1,7 @@
 FROM phusion/passenger-full:2.2.0
 
 RUN apt-get update && apt-get install -y \
-    dos2unix libnginx-mod-http-passenger=1:6.0.18-1~focal1 \
+    dos2unix libpq-dev libnginx-mod-http-passenger=1:6.0.18-1~focal1 \
     && rm -rf /var/lib/apt/lists/*
 
 RUN rm /etc/nginx/sites-enabled/default
@@ -20,8 +20,11 @@ ENV APP_VERSION=$VERSION
 ENV COMMIT_SHA=$COMMIT_SHA
 ENV NODE_MODULES_CACHE true
 ENV RAILS_ENV=production
+ENV RAILS_LOG_TO_STDOUT=true
 ENV BUNDLE_WITHOUT="development test"
 ENV API_HOME /home/app/api-crud
+
+ENV RAILS_MAX_THREADS 5
 
 RUN mkdir -p ${API_HOME}
 
@@ -36,8 +39,8 @@ COPY --chown=app:app . .
 RUN rm -f config/credentials.yml.enc
 RUN dos2unix bin/* && EDITOR="echo" bin/rails credentials:edit
 RUN SECRET_KEY_BASE=$(bundle exec rake secret)
-
-VOLUME [ "${API_HOME}/db" ]
+# RUN bundle exec rake db:create \
+#     && bundle exec rake db:migrate
 
 USER root
 
@@ -52,4 +55,4 @@ LABEL org.opencontainers.image.title="Official Passenger image" \
     org.opencontainers.image.licenses="MIT" \
     org.opencontainers.image.maintainer="Erivando Sena<erivandosena@gmail.com>"
 
-CMD ["/sbin/my_init"]
+# CMD ["/sbin/my_init"]

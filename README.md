@@ -19,24 +19,23 @@
 
 ## 📝 Table of Contents
 
-- [📝 Table of Contents](#-table-of-contents)
-- [🧐 About ](#-about-)
-- [🎥 Application Sample / Working ](#-application-sample--working-)
-- [💭 How it works ](#-how-it-works-)
-- [🎈 Usage ](#-usage-)
-- [Install Docker](#install-docker)
-    - [To Install Docker in WSL/2](#to-install-docker-in-wsl2)
-  - [Installing](#installing)
-  - [Example:](#example)
-- [🏁 Getting Started ](#-getting-started-)
-  - [Prerequisites](#prerequisites)
-  - [Installing](#installing-1)
-      - [Build image:](#build-image)
-      - [Compose V2 (para Compose V1 use: docker-compose ...):](#compose-v2-para-compose-v1-use-docker-compose-)
-- [🚀 Deploying your API ](#-deploying-your-api-)
-- [⛏️ Built Using ](#️-built-using-)
-- [✍️ Authors ](#️-authors-)
-- [🎉 Acknowledgements ](#-acknowledgements-)
+- [Rotas](#rotas)
+      - [http://localhost:8002/api/v1](#httplocalhost8002apiv1)
+    - [Listar todas as páginas](#listar-todas-as-páginas)
+  - [Install Docker](#install-docker)
+      - [To Install Docker in WSL/2](#to-install-docker-in-wsl2)
+    - [Installing](#installing)
+    - [Example:](#example)
+  - [🏁 Getting Started ](#-getting-started-)
+    - [Prerequisites](#prerequisites)
+    - [Installing](#installing-1)
+        - [Build image:](#build-image)
+        - [Compose V2 (para Compose V1 use: docker-compose ...):](#compose-v2-para-compose-v1-use-docker-compose-)
+  - [🚀 Deploying your API ](#-deploying-your-api-)
+    - [Rotas:](#rotas-1)
+  - [⛏️ Built Using ](#️-built-using-)
+  - [✍️ Authors ](#️-authors-)
+  - [🎉 Acknowledgements ](#-acknowledgements-)
 
 ## 🧐 About <a name = "about"></a>
 
@@ -48,24 +47,91 @@ A RESTful API ultimately lives on the Web, or on a communication network where d
 
 ## 💭 How it works <a name = "working"></a>
 
-The API first extracts the word from the comment and then fetches word definitions, part of speech, example and source from the Oxford Dictionary API.
-
-If the word does not exist in the Oxford Dictionary, the Oxford API then returns a 404 response upon which the API then tries to fetch results form the Urban Dictionary API.
-
-The API uses the Pushshift API to fetch comments, PRAW module to reply to comments and Heroku as a server.
-
 The entire API is written in Ruby 3.1.1
 
 ## 🎈 Usage <a name = "usage"></a>
 
-To use the API, type GET:
+# Rotas
+#### http: //domain/api/v1
+### Listar todos recursos
+Retorna uma lista de todos os recursos cadastrados.  
+**GET** `/api/v1/pages` 
 
+### Obter um recurso específico
+Retorna os detalhes de um recurso específico com base no ID fornecido.  
+**GET** `/api/v1/pages/:id`
+Parâmetros  
+- `:id` (obrigatório): O ID do recurso desejado.  
+
+### Criar um novo recurso
+Cria um novo recurso com os dados fornecidos.
+**POST** `/api/v1/pages`
+Parâmetros da Requisição  
+- `page` (obrigatório): Um objeto JSON contendo os detalhes do recurso a ser criado.  
+Os campos obrigatórios são `title`, `description` e `active`.  
+***Exemplo de requisição***
+```json
+{
+  "page": {
+    "title": "Novo Artigo",
+    "description": "Texto descritivo do novo artigo.",
+    "active": true
+  }
+}
 ```
-http://localhost:8002/api/v1
+### Atualizar uma página existente
+Atualiza os detalhes de um recurso existente com base no ID fornecido.  
+**PATCH/PUT** `/api/v1/pages/:id`
+Parâmetros  
+- `:id` (obrigatório): O ID do recurso a ser atualizado.  
+Parâmetros da Requisição  
+- `page` (obrigatório): Um objeto JSON contendo os detalhes atualizados do recurso. 
+Os campos permitidos para atualização são title, description e active.  
+***Exemplo de requisição***
+```json
+{
+  "page": {
+    "title": "Atualização do artigo",
+    "description": "Texto descritivo com atualização desativado.",
+    "active": false
+  }
+}
+```
+### Excluir uma página
+Exclui um recurso existente com base no ID fornecido.  
+**DELETE** `/api/v1/pages/:id` 
+Parâmetros  
+- `:id` (obrigatório): O ID do recurso a ser excluído.
+
+### Erros
+A API retorna os respectivos textos de erros, mensagens e validações:  
+***Exemplo de respostas:***
+```json
+{
+  "error": "Recurso não encontrado"
+}
 ```
 ```json
 {
-   "message":"Welcome to API RESTful Ruby on Rails"
+  "error": "404 Not Found: Endpoint inexistente para o recurso."
+}
+```
+```json
+{
+  "message": "Bem-vindo à API RESTful Ruby on Rails"
+}
+```
+```json
+{
+    "title": [
+        "não pode ficar em branco"
+    ],
+    "description": [
+        "não pode ficar em branco"
+    ],
+    "active": [
+        "não está incluído na lista"
+    ]
 }
 ```
 
@@ -111,6 +177,7 @@ docker rm -f $(docker ps -qa)
 docker rmi -f $(docker images -qa)
 docker volume rm -f $(docker volume ls -q)
 docker network rm $(docker network ls -q)
+docker system prune -fa
 ```
 
 ### Example:
@@ -149,6 +216,8 @@ Passenger
 OAuth2  
 Devise  
 Doorkeeper  
+PosgreSQL  
+Redis  
 
 ```cmd
 Rails version: 7.0.6
@@ -168,14 +237,20 @@ docker push erivando/api-ruby:v1.0.0
 ##### Compose V2 (para Compose V1 use: docker-compose ...):
 ```bash
 docker compose build --no-cache && docker compose up -d
-docker compose exec api-crud bash
-docker compose logs -f -t api-crud
+docker compose exec api-ruby bash
+docker compose logs -f -t api-ruby
 docker compose down
 ```
 
 ## 🚀 Deploying your API <a name = "deployment"></a>
 
-To see an example project on how to deploy your API, please see my own configuration:
+Gerar modelo Page com os atributos `title` (string), `description` (text), `active` (boolean).   
+Também irá gerar automaticamente o controlador, as rotas e os testes correspondentes para API. 
+
+```bash
+rails new api_crud -v 3.1.1 --api --skip-bundle --version=7.0.6 -d postgresql
+rails g scaffold Page title:string description:text active:boolean
+```
 
 - **Docker**: https://hub.docker.com/r/erivando/api-ruby
 

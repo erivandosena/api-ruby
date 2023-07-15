@@ -3,3 +3,7 @@ docker-compose.yaml
 Dockerfile
 LICENSE
 README.md
+/log
+/tmp
+/pg_logs
+/redis_logs

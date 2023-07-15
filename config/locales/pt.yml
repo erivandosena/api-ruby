@@ -32,3 +32,6 @@
 pt-BR:
   welcome:
     message: "Bem-vindo à API RESTful Ruby on Rails"
+  errors:
+    resource_not_found: "Recurso não encontrado."
+    endpoint_not_found: "404 Not Found: Endpoint inexistente para o recurso."
