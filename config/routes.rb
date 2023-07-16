@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  mount Rswag::Ui::Engine => '/api-docs'
+  mount Rswag::Api::Engine => '/api-docs'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
@@ -6,9 +8,15 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
+
+      # Rota para a documentação do Swagger
+      mount Rswag::Api::Engine => '/api-docs'
+      mount Rswag::Ui::Engine => '/api-docs'
+
+      resources :pages
+      
       get '/', to: 'welcome#index'
       # Outras rotas da API
-      resources :pages
 
      # Rota para capturar todas as rotas não correspondentes e retornar o erro 404
       match '*unmatched_route', to: 'errors#not_found', via: :all
