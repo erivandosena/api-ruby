@@ -49,13 +49,14 @@ end
 
 gem 'optimist'
 
-gem "grape"
+gem 'grape-swagger-rails'
 
-gem "grape-swagger"
+gem 'rswag-api'
+gem 'rswag-ui'
 
-gem 'devise'
+# gem 'devise'
 
-gem 'doorkeeper'
+# gem 'doorkeeper'
 
 gem 'rails-i18n'
 

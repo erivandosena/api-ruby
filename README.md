@@ -17,10 +17,14 @@
     <br> 
 </p>
 
+Endpoint API: http://localhost:8002/api/v1
+Endpoint DOC: http://localhost:8002/api/v1/api-docs/
+
 ## 📝 Table of Contents
 
 - [Rotas](#rotas)
       - [http://localhost:8002/api/v1](#httplocalhost8002apiv1)
+      - [http://localhost:8002/api/v1/api-docs/](#httplocalhost8002apiv1api-docs)
     - [Listar todas as páginas](#listar-todas-as-páginas)
   - [Install Docker](#install-docker)
       - [To Install Docker in WSL/2](#to-install-docker-in-wsl2)
@@ -180,6 +184,19 @@ docker network rm $(docker network ls -q)
 docker system prune -fa
 ```
 
+### Installing Docs
+**Gemfile**
+gem 'grape-swagger-rails'
+gem 'rswag-api'
+gem 'rswag-ui'
+
+bundle install
+
+**Install generators/customizing**
+rails g rswag:api:install
+rails g rswag:ui:install
+rails g rswag:ui:custom
+
 ### Example:
 
 > !dict what is love
@@ -215,7 +232,9 @@ Nginx Server
 Passenger  
 OAuth2  
 Devise  
-Doorkeeper  
+Doorkeeper 
+Rswag
+Swagger 
 PosgreSQL  
 Redis  
 

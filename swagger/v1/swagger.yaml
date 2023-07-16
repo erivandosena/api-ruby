@@ -1,0 +1,113 @@
+openapi: 3.0.0
+info:
+  title: API Documentation - Pages
+  version: 1.0.0
+servers:
+  - url: http://localhost:8002/api/v1
+  - url: https://localhost/api/v1
+paths:
+  /pages:
+    get:
+      summary: List all pages
+      operationId: listPages
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Page'
+    post:
+      summary: Create a new page
+      operationId: createPage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PageInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page'
+  /pages/{id}:
+    get:
+      summary: Get a specific page
+      operationId: getPage
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Page ID
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page'
+    patch:
+      summary: Update a specific page
+      operationId: updatePage
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Page ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PageInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page'
+    delete:
+      summary: Delete a specific page
+      operationId: deletePage
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Page ID
+      responses:
+        '204':
+          description: No Content
+components:
+  schemas:
+    Page:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        active:
+          type: boolean
+    PageInput:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        active:
+          type: boolean
