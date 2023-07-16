@@ -17,8 +17,8 @@
     <br> 
 </p>
 
-Endpoint API: http://localhost:8002/api/v1
-Endpoint DOC: http://localhost:8002/api/v1/api-docs/
+Endpoint API: http://localhost:8002/api/v1  
+Endpoint DOC: http://localhost:8002/api/v1/api-docs/  
 
 ## 📝 Table of Contents
 
@@ -186,16 +186,16 @@ docker system prune -fa
 
 ### Installing Docs
 **Gemfile**
-gem 'grape-swagger-rails'
-gem 'rswag-api'
-gem 'rswag-ui'
+gem 'grape-swagger-rails'  
+gem 'rswag-api'  
+gem 'rswag-ui'  
 
-bundle install
+bundle install  
 
 **Install generators/customizing**
-rails g rswag:api:install
-rails g rswag:ui:install
-rails g rswag:ui:custom
+rails g rswag:api:install  
+rails g rswag:ui:install  
+rails g rswag:ui:custom  
 
 ### Example:
 

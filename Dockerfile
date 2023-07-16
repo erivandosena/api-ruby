@@ -1,7 +1,7 @@
 FROM phusion/passenger-full:2.2.0
 
 RUN apt-get update && apt-get install -y \
-    dos2unix libpq-dev libnginx-mod-http-passenger=1:6.0.18-1~focal1 \
+    libpq-dev libnginx-mod-http-passenger=1:6.0.18-1~focal1 \
     && rm -rf /var/lib/apt/lists/*
 
 RUN rm /etc/nginx/sites-enabled/default
@@ -37,7 +37,7 @@ RUN bundle install --jobs $(nproc) --retry 3
 COPY --chown=app:app . .
 
 RUN rm -f config/credentials.yml.enc
-RUN dos2unix bin/* && EDITOR="echo" bin/rails credentials:edit
+RUN EDITOR="echo" bin/rails credentials:edit
 RUN SECRET_KEY_BASE=$(bundle exec rake secret)
 # RUN bundle exec rake db:create \
 #     && bundle exec rake db:migrate
