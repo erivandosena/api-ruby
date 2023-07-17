@@ -1,4 +1,6 @@
 .git
+.gitignore
+.gitattributes
 docker-compose.yaml
 Dockerfile
 LICENSE

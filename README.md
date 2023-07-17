@@ -184,18 +184,64 @@ docker network rm $(docker network ls -q)
 docker system prune -fa
 ```
 
-### Installing Docs
-**Gemfile**
-gem 'grape-swagger-rails'
-gem 'rswag-api'
-gem 'rswag-ui'
+### Installing Docs  
+**Gemfile**  
+gem 'grape-swagger-rails'  
+gem 'rswag-api'  
+gem 'rswag-ui'  
 
+```bash
 bundle install
+```
 
-**Install generators/customizing**
-rails g rswag:api:install
-rails g rswag:ui:install
-rails g rswag:ui:custom
+**Install generators/customizing**  
+```bash
+rails g rswag:api:install  
+rails g rswag:ui:install  
+rails g rswag:ui:custom  
+```
+
+### User
+
+```bash
+rails g controller User email:string password_digest:string
+
+rails g model User email:string password_digest:string
+
+rails g model ApiKey bearer_id:integer bearer_type:string token:string
+```
+
+#### Função HMAC para chave secreta
+```bash
+API_KEY_HMAC_SECRET_KEY=$(bundle exec bin/rails runner "puts SecureRandom.hex(32)")
+```
+
+#### Add user  
+```bash
+docker exec -it api-ruby bin/rails runner 'User.create!(email: "admin@admin.com", password: "1234")'
+```
+
+#### Create Token API  
+```bash
+curl -v -X POST http://localhost:8002/api/v1/api-keys -u admin@admin.com:1234
+```
+***Exemplo de resposta:***  
+```json
+{
+	"api_key": "1febeb9cd6babc872e81eefe349062a2"
+}
+```
+
+#### Modelos de solicitações para API REST  
+```bash
+curl -v -X GET http://localhost:8002/api/v1/api-keys -H 'Authorization: Bearer 1febeb9cd6babc872e81eefe349062a2'
+
+curl -v -X GET http://localhost:8002/api/v1/users -H 'Authorization: Bearer 1febeb9cd6babc872e81eefe349062a2'
+
+curl -v -X GET http://localhost:8002/api/v1/pages -H 'Authorization: Bearer 1febeb9cd6babc872e81eefe349062a2'
+
+curl -v -X DELETE http://localhost:8002/api/v1/api-keys/1 -H 'Authorization: Bearer 1febeb9cd6babc872e81eefe349062a2'
+```
 
 ### Example:
 
@@ -232,9 +278,9 @@ Nginx Server
 Passenger  
 OAuth2  
 Devise  
-Doorkeeper 
-Rswag
-Swagger 
+Doorkeeper  
+Rswag  
+Swagger  
 PosgreSQL  
 Redis  
 

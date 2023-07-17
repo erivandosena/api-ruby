@@ -67,3 +67,5 @@ gem 'activerecord'
 gem 'redis'
 gem 'redis-namespace'
 gem 'redis-rails'
+
+gem 'bcrypt'
