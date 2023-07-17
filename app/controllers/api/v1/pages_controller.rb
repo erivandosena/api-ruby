@@ -1,5 +1,14 @@
 # class PagesController < ApplicationController
 class Api::V1::PagesController < ApplicationController
+  include ApiKeyAuthenticatable
+
+    # # Requer autenticação de chave de API
+    # prepend_before_action :authenticate_with_api_key!, only: %i[index destroy]
+
+    # # Autenticação de chave de API opcional para logout
+    # prepend_before_action :authenticate_with_api_key, only: [:destroy]
+
+
   before_action :set_page, only: %i[ show update destroy ]
 
   # GET /pages
